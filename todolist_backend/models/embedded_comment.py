@@ -1,7 +1,7 @@
-from mongoengine.fields import EmbeddedDocumentField, StringField
+from mongoengine.fields import EmbeddedDocument, StringField
 
 
-class EmbeddedComment(EmbeddedDocumentField):
+class EmbeddedComment(EmbeddedDocument):
     """
     A comment in a document.
     """
