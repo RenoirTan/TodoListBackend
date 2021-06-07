@@ -1,4 +1,6 @@
 from typing import *
+import inflect
+from mongoengine.base.metaclasses import TopLevelDocumentMetaclass
 from mongoengine.document import Document
 from mongoengine.fields import EmbeddedDocumentField, ListField
 from .embedded_comment import EmbeddedComment
@@ -24,33 +26,10 @@ class BaseODM(Document):
         """
         Get the collection name of a document based on its class name.
         This assumes that the name of the class is singular and is in
-        English. The resulting collection name is simply the class name
-        plus the plural suffix in English ('s' or 'es'). Unfortunately, this
-        is not a catch-all as English is notoriously irregular (as explained
-        under `Limitations`). However, I have tried to write if cases
-        for certain common cases:
+        English. The return value is simply the plural form of the word.
 
-        1. Normal words like `Post` and `User` will have 's' appended to the
-        end.
-        2. Words ending with an /s/ like sound such as words ending with
-        's', 'sh', 'ch' or 'x' will have 'es' added to the back. Therefore,
-        `Match` will become `Matches`.
-
-        For more ambiguous cases, such as for words ending in 'f', you
-        are going to have to specify the plural yourself. See
-        `Limitations` for more info.
-
-        Limitations
-        -----------
-        Because English has irregular nouns, the expected plural forms of
-        some nouns cannot be formed with simple agglutination.
-        For example, the plural of 'foot' is 'feet'.
-        To specify a custom collection name, you can pass the name as
-        a keyword argument in `cls.setup_odm` by writing:
-
-        >>> class Man(BaseODM):
-        ...     pass
-        Man.setup_odm(collection="Men")
+        This method uses `inflect.engine.plural` to generate the plural
+        forms.
 
         Example
         -------
@@ -74,15 +53,11 @@ class BaseODM(Document):
         collection_name: str
             The expected name of the collection.
         """
-        name: str = cls.__name__
-        # Fizzbuzz
-        if name[-1] in {"s", "x"} or name[-2:] in {"sh", "ch"}:
-            name += "e"
-        return name + "s"
+        return inflect.engine().plural(cls.__name__)
 
     
     @classmethod
-    def setup_odm(cls, *args, **kwargs) -> Type:
+    def setup_odm(cls, *args, **kwargs) -> TopLevelDocumentMetaclass:
         """
         Setup meta configs for this ODM. This class method must be called
         at least once defining a child class which inherits from `BaseODM`.
@@ -97,7 +72,7 @@ class BaseODM(Document):
         >>> class Item(BaseODM):
         ...     pass
         >>> Item.setup_odm()
-        >>> Item.meta["collection"]
+        >>> Item._meta["collection"]
         Items
 
         Parameters
@@ -107,10 +82,16 @@ class BaseODM(Document):
 
         **kwargs: Dict[str, Any]
             - collection: The corresponding collection name
+              default = cls.collection_name()
+            - allow_inheritance: Whether to inheritance
+              default = True
         """
         meta = BaseODM._meta.copy()
         meta["collection"] = kwargs.get(
             "collection", cls.collection_name()
+        )
+        meta["allow_inheritance"] = kwargs.get(
+            "allow_inheritance", True
         )
         cls._meta = meta
         return cls
