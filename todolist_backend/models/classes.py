@@ -81,10 +81,10 @@ class BaseODM(Document):
         collection_name: str
             The expected name of the collection.
         """
-        name = cls.__name__
+        name: str = cls.__name__
         # Fizzbuzz
         if name[-1] in {"s", "x"} or name[-2:] in {"sh", "ch"}:
-            name += 2
+            name += "e"
         return name + "s"
 
     
