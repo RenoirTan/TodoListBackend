@@ -1,5 +1,5 @@
 from mongoengine.document import EmbeddedDocument
-from mongoengine.fields import EmbeddedDocumentField, StringField
+from mongoengine.fields import StringField
 
 
 class EmbeddedTag(EmbeddedDocument):

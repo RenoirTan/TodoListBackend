@@ -19,3 +19,9 @@ DBSERVER_CONFIGS: Dict[str, Any] = json.load(
     (CONFIGS_DIR / DBSERVER_FILENAME).open("r")
 )
 MONGOENGINE_ALIAS: str = "todolist_dbclient"
+
+
+FLASKAPP_FILENAME: str = "flaskapp.json"
+FLASKAPP_CONFIGS: Dict[str, Any] = json.load(
+    (CONFIGS_DIR / FLASKAPP_FILENAME).open("r")
+)
