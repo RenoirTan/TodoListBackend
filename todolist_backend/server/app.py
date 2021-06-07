@@ -8,4 +8,4 @@ app.secret_key = FLASKAPP_CONFIGS["secretkey"]
 
 
 def get_configs() -> Dict[str, Any]:
-    return FLASKAPP_CONFIGS["options"]
+    return FLASKAPP_CONFIGS["options"].copy()

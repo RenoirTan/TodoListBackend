@@ -6,7 +6,7 @@ from todolist_backend import cli
 
 def get_subcommand(subcommand: str, possibilities: List[str]) -> str:
     try:
-        return get_close_matches(subcommand, possibilities, 1, 0.2)[0]
+        return get_close_matches(subcommand, possibilities, 1, 0.1)[0]
     except IndexError as e:
         raise ValueError("Bad subcommand: {0}".format(subcommand)) from e
 

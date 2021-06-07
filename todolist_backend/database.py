@@ -42,19 +42,36 @@ def iter_mongo_uris(configs: Dict[str, Any]) -> Generator[str, str, None]:
         )
 
 
-def init() -> int:
+def calm_init() -> Tuple[bool, List[Exception]]:
     """
     Initialise the database connection.
 
     Returns
     -------
-    code: int
-        - 0 if OK
-        - 1 if no URIs work
+    ok, exceptions: Tuple[bool, List[Exception]]
+        If one of the connection attempts was successful, `ok` will be True
     """
+    exceptions: List[Exception] = []
     for uri in iter_mongo_uris(DBSERVER_CONFIGS):
         try:
             mongoengine.connect(alias=MONGOENGINE_ALIAS, host=uri)
-        except:
-            continue
-    return 1
+        except Exception as e:
+            exceptions.append(e)
+        else:
+            return True, exceptions
+    return False, exceptions
+
+
+def panic_init():
+    """
+    Initialise the database connection but panic if no connection attempt
+    was successful.
+
+    Raises
+    ------
+    ValueError
+        If no connection attempt was successful.
+    """
+    ok, exceptions = calm_init()
+    if not ok:
+        raise ValueError(exceptions)
