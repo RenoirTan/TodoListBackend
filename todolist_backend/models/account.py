@@ -1,6 +1,6 @@
 from typing import *
 from mongoengine import StringField
-from .classes import CommentedODM
+from .commented_odm import CommentedODM
 
 
 class Account(CommentedODM):

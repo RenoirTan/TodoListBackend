@@ -95,17 +95,3 @@ class BaseODM(Document):
         )
         cls._meta = meta
         return cls
-
-
-class CommentedODM(BaseODM):
-    """
-    A document which contains a list of comments.
-    """
-    comments = ListField(EmbeddedDocumentField(EmbeddedComment))
-
-
-class TaggedODM(BaseODM):
-    """
-    A document which contains a list of tags.
-    """
-    tags = ListField(EmbeddedDocumentField(EmbeddedTag))

@@ -1,7 +1,7 @@
 from typing import *
 from mongoengine import StringField
 from mongoengine.fields import DateTimeField
-from .classes import TaggedODM
+from .tagged_odm import TaggedODM
 
 
 class TodoItem(TaggedODM):
