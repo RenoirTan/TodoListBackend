@@ -11,4 +11,4 @@ def test_collection_name():
 
 def test_setup_odm():
     Example.setup_odm(collection="CompletelyArbitraryName")
-    assert Example.meta["collection"] == "CompletelyArbitraryName"
+    assert Example._meta["collection"] == "CompletelyArbitraryName"

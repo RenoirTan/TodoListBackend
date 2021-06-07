@@ -5,15 +5,6 @@ from .embedded_comment import EmbeddedComment
 from .embedded_tag import EmbeddedTag
 
 
-# meta defined outside BaseODM because mongoengine's base metaclass does
-# not allow access to meta.
-# But apparently you can set it from outside by doing:
-# cls.meta = _meta.copy()
-_meta: Dict[str, Any] = {
-    "allow_inheritance": True
-}
-
-
 class BaseODM(Document):
     """
     Base class for document models used by this project.
@@ -24,7 +15,9 @@ class BaseODM(Document):
     must be named `Account`.
     """
 
-    meta: Dict[str, Any] = _meta.copy()
+    meta: Dict[str, Any] = {
+        "allow_inheritance": True
+    }
 
     @classmethod
     def collection_name(cls) -> str:
@@ -113,13 +106,13 @@ class BaseODM(Document):
             Not used as of now
 
         **kwargs: Dict[str, Any]
-            - collection: The corresponding
+            - collection: The corresponding collection name
         """
-        meta = _meta.copy()
+        meta = BaseODM._meta.copy()
         meta["collection"] = kwargs.get(
             "collection", cls.collection_name()
         )
-        cls.meta = meta
+        cls._meta = meta
         return cls
 
 
