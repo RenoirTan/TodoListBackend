@@ -11,12 +11,23 @@ flask = "^2.0"
 dnspython = "^2.0"
 pymongo = "^3.11"
 waitress = "^1.4"
+mongoengine = "^0.23"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 Sphinx = "^4.0"
 sphinx-rtd-theme = "^0.5.2"
 numpydoc = "^1.1"
+
+[tool.black]
+line-length = 80
+include = ".pyi?$"
+exclude = """
+.eggs/
+.git/
+build
+dist
+"""
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
