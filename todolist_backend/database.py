@@ -54,10 +54,13 @@ def calm_init() -> Tuple[bool, List[Exception]]:
     exceptions: List[Exception] = []
     for uri in iter_mongo_uris(DBSERVER_CONFIGS):
         try:
+            print("Trying {0}".format(uri))
             mongoengine.connect(alias=MONGOENGINE_ALIAS, host=uri)
         except Exception as e:
             exceptions.append(e)
+            continue
         else:
+            print("Connection successful!")
             return True, exceptions
     return False, exceptions
 

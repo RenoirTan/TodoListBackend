@@ -1,10 +1,9 @@
 from typing import *
+from bson import json_util
 import inflect
 from mongoengine.base.metaclasses import TopLevelDocumentMetaclass
 from mongoengine.document import Document
-from mongoengine.fields import EmbeddedDocumentField, ListField
-from .embedded_comment import EmbeddedComment
-from .embedded_tag import EmbeddedTag
+from todolist_backend.info import MONGOENGINE_ALIAS
 
 
 class BaseODM(Document):
@@ -18,7 +17,8 @@ class BaseODM(Document):
     """
 
     meta: Dict[str, Any] = {
-        "allow_inheritance": True
+        "allow_inheritance": True,
+        "db_alias": MONGOENGINE_ALIAS
     }
 
     @classmethod
