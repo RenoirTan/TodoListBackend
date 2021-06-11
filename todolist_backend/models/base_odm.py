@@ -2,6 +2,7 @@ from typing import *
 from bson import json_util
 import inflect
 from mongoengine.base.metaclasses import TopLevelDocumentMetaclass
+from mongoengine.connection import get_connection
 from mongoengine.document import Document
 from todolist_backend.info import MONGOENGINE_ALIAS
 
@@ -55,7 +56,6 @@ class BaseODM(Document):
         """
         return inflect.engine().plural(cls.__name__)
 
-    
     @classmethod
     def setup_odm(cls, *args, **kwargs) -> TopLevelDocumentMetaclass:
         """
@@ -93,5 +93,10 @@ class BaseODM(Document):
         meta["allow_inheritance"] = kwargs.get(
             "allow_inheritance", True
         )
+        print(cls.get_connection())
         cls._meta = meta
         return cls
+    
+    @classmethod
+    def get_connection(cls):
+        return get_connection(MONGOENGINE_ALIAS)

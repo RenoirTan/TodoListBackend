@@ -1,5 +1,5 @@
 from typing import *
-import mongoengine
+from mongoengine import connect
 from .info import DBSERVER_CONFIGS, MONGOENGINE_ALIAS
 
 
@@ -55,7 +55,7 @@ def calm_init() -> Tuple[bool, List[Exception]]:
     for uri in iter_mongo_uris(DBSERVER_CONFIGS):
         try:
             print("Trying {0}".format(uri))
-            mongoengine.connect(alias=MONGOENGINE_ALIAS, host=uri)
+            connect(alias=MONGOENGINE_ALIAS, host=uri)
         except Exception as e:
             exceptions.append(e)
             continue
